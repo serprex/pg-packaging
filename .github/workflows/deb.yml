@@ -19,11 +19,10 @@ jobs:
 
       - name: create and install extensions
         run: |
-          sudo apt install -y postgresql-common ca-certificates
           sudo /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh -y
           sudo apt install -y postgresql-${{ matrix.pg }} gcc postgresql-server-dev-${{ matrix.pg }} make --no-install-recommends
-          mkdir -p pg_imv/.debpkg pg_clickhouse/.debpkg
-          cd pg_imv
+          mkdir -p pg_ivm/.debpkg pg_clickhouse/.debpkg
+          cd pg_ivm
           make USE_PGXS=1 DESTDIR=.debpkg install
           cd ../pg_clickhouse
           make USE_PGXS=1 DESTDIR=.debpkg install
