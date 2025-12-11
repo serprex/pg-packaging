@@ -19,16 +19,12 @@ jobs:
 
       - name: create sample script
         run: |
-          apt-get install -y postgres-${{ matrix.pg }}
-          mkdir -p pg_imv/.debpkg
-          (
-            cd pg_imv
-            make install prefix=pg_imv/.debpkg
-          )
-          (
-            cd pg_clickhouse
-            make install prefix=pg_clickhouse/.debpkg
-          )
+          apt-get install -y postgresql-${{ matrix.pg }} gcc postgresql-server-dev-${{ matrix.pg }} make --no-install-recommends
+          mkdir -p pg_imv/.debpkg pg_clickhouse/.debpkg
+          cd pg_imv
+          make USE_PGXS=1 DESTDIR=.debpkg install
+          cd ../pg_clickhouse
+          make USE_PGXS=1 DESTDIR=.debpkg install
 
       - name: imv
         uses: jiro4989/build-deb-action@v4
