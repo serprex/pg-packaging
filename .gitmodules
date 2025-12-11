@@ -1,0 +1,6 @@
+[submodule "pg_ivm"]
+	path = pg_ivm
+	url = https://github.com/sraoss/pg_ivm
+[submodule "pg_clickhouse"]
+	path = pg_clickhouse
+	url = https://github.com/ClickHouse/pg_clickhouse.git
