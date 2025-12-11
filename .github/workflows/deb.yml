@@ -34,18 +34,18 @@ jobs:
           cd pg_clickhouse
           make USE_PGXS=1 DESTDIR=.debpkg install
 
-      - name: imv
-        uses: jiro4989/build-deb-action@v4
+      - name: package pg_ivm
+        uses: jiro4989/build-deb-action@fa58571caeb53074d21ae3f1d128d0703e13b618
         with:
-          package: postgres-${{ matrix.pg }}-imv
-          package_root: pg_imv/.debpkg
+          package: postgres-${{ matrix.pg }}-ivm
+          package_root: pg_ivm/.debpkg
           maintainer: ClickHouse
           version: ${{ github.ref }} # refs/tags/v*.*.*
           arch: ${{ matrix.arch }}
-        id: build-imv
+        id: build-ivm
 
-      - name: pg_clickhouse
-        uses: jiro4989/build-deb-action@v4
+      - name: package pg_clickhouse
+        uses: jiro4989/build-deb-action@fa58571caeb53074d21ae3f1d128d0703e13b618
         with:
           package: postgres-${{ matrix.pg }}-pg_clickhouse
           package_root: pg_clickhouse/.debpkg
