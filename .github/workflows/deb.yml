@@ -17,14 +17,21 @@ jobs:
         with:
           submodules: true
 
-      - name: create and install extensions
+      - name: install postgres and build dependencies
         run: |
           sudo /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh -y
-          sudo apt install -y postgresql-${{ matrix.pg }} gcc postgresql-server-dev-${{ matrix.pg }} make --no-install-recommends
-          mkdir -p pg_ivm/.debpkg pg_clickhouse/.debpkg
+          sudo apt install -y postgresql-${{ matrix.pg }} build-essential postgresql-server-dev-${{ matrix.pg }} libcurl4-openssl-dev uuid-dev --no-install-recommends
+
+      - name: build pg_ivm
+        run: |
+          mkdir -p pg_ivm/.debpkg
           cd pg_ivm
           make USE_PGXS=1 DESTDIR=.debpkg install
-          cd ../pg_clickhouse
+
+      - name: build pg_clickhouse
+        run: |
+          mkdir -p pg_clickhouse/.debpkg
+          cd pg_clickhouse
           make USE_PGXS=1 DESTDIR=.debpkg install
 
       - name: imv
