@@ -10,7 +10,7 @@ jobs:
     strategy:
       matrix:
         arch: ['amd64', 'arm64']
-        pg: [17, 18]
+        pg: [16, 17, 18]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
@@ -42,7 +42,7 @@ jobs:
           maintainer: ClickHouse
           version: ${{ github.ref }} # refs/tags/v*.*.*
           arch: ${{ matrix.arch }}
-        id: build-ivm
+        id: build-pg_ivm
 
       - name: package pg_clickhouse
         uses: jiro4989/build-deb-action@fa58571caeb53074d21ae3f1d128d0703e13b618
@@ -53,3 +53,15 @@ jobs:
           version: ${{ github.ref }} # refs/tags/v*.*.*
           arch: ${{ matrix.arch }}
         id: build-pg_clickhouse
+
+      - name: Upload pg_ivm artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: postgresql-${{ matrix.pg }}-pg-ivm-${{ matrix.arch }}
+          path: ${{ steps.build-pg_ivm.outputs.file_name }}
+
+      - name: Upload pg_clickhouse artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: postgresql-${{ matrix.pg }}-pg-clickhouse-${{ matrix.arch }}
+          path: ${{ steps.build-pg_clickhouse.outputs.file_name }}
