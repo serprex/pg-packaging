@@ -26,13 +26,13 @@ jobs:
         run: |
           mkdir -p pg_ivm/.debpkg
           cd pg_ivm
-          make USE_PGXS=1 DESTDIR=.debpkg install
+          make USE_PGXS=1 DESTDIR=.debpkg CFLAGS="-g -O2" install
 
       - name: build pg_clickhouse
         run: |
           mkdir -p pg_clickhouse/.debpkg
           cd pg_clickhouse
-          make USE_PGXS=1 DESTDIR=.debpkg install
+          make USE_PGXS=1 DESTDIR=.debpkg CFLAGS="-g -O2" CXXFLAGS="-g -O2" install
 
       - name: package pg_ivm
         uses: jiro4989/build-deb-action@fa58571caeb53074d21ae3f1d128d0703e13b618
@@ -42,6 +42,7 @@ jobs:
           maintainer: ClickHouse
           version: ${{ github.ref }} # refs/tags/v*.*.*
           arch: ${{ matrix.arch }}
+          depends: "postgresql-${{ matrix.pg }}"
         id: build-pg_ivm
 
       - name: package pg_clickhouse
@@ -52,6 +53,7 @@ jobs:
           maintainer: ClickHouse
           version: ${{ github.ref }} # refs/tags/v*.*.*
           arch: ${{ matrix.arch }}
+          depends: "postgresql-${{ matrix.pg }}"
         id: build-pg_clickhouse
 
       - name: Upload pg_ivm artifact
